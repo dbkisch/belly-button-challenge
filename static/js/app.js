@@ -3,19 +3,36 @@ function buildMetadata(sample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
     // get the metadata field
-
-
+    let sampleMetadata = Object.values(data.metadata);
+    console.log(sampleMetadata);
     // Filter the metadata for the object with the desired sample number
-
+      
+    function selectName(item) {
+      return item.id == sample;
+    }
+    
+    let chosen = sampleMetadata.filter(selectName);
+    console.log(chosen[0]);
+    let chosenKeys = Object.keys(chosen[0]);
+    let chosenValues = Object.values(chosen[0]);
 
     // Use d3 to select the panel with id of `#sample-metadata`
-
-
+    newMetadata = d3.select("#sample-metadata");
+    
     // Use `.html("") to clear any existing metadata
 
 
     // Inside a loop, you will need to use d3 to append new
-    // tags for each key-value in the filtered metadata.
+    // tags for each key-value in the filtered metadata. 
+    
+    for (let j = 0; j < chosenKeys.length; j++) {
+      newMetadata
+          .append("div")
+          .text(chosenKeys[j] + ": " + chosenValues[j])
+          console.log(chosenKeys[j] + ": " + chosenValues[j]);
+    }
+
+
 
   });
 }
@@ -56,22 +73,33 @@ function init() {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
     // Get the names field
-
+    let sampleNames = Object.values(data.names);
+    console.log(sampleNames);
 
     // Use d3 to select the dropdown with id of `#selDataset`
-
+    let dropdownMenu = d3.select("#selDataset");
 
     // Use the list of sample names to populate the select options
     // Hint: Inside a loop, you will need to use d3 to append a new
     // option for each sample name.
 
-
-    // Get the first sample from the list
-
-
+    sampleNames.forEach((sample) => {
+      dropdownMenu
+          .append("option")
+          .text(sample)
+          .property("value", sample);
+    });
+      
+    
+      // Get the first sample from the list
+      let firstSample = dropdownMenu.property("value");
+      console.log(firstSample);
     // Build charts and metadata panel with the first sample
+    let test = buildMetadata(firstSample);
+    
 
-  });
+
+});
 }
 
 // Function for event listener
