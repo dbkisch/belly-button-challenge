@@ -53,12 +53,45 @@ function buildCharts(sample) {
     console.log(chosenSample);
 
     // Get the otu_ids, otu_labels, and sample_values  
+    // let otuidArray = [];
+    // let samplevalArray = [];
+    // let otulabelArray = [];
+
+    let otuidArray = chosenSample[0].otu_ids;
+    console.log("otiuidArray", otuidArray);
+
+    let samplevalArray = chosenSample[0].sample_values;
+    console.log("samplevalArray", samplevalArray);
+    
+    let otulabelArray = chosenSample[0].otu_labels;
+    
+    
+    let samplesSliced = samplevalArray.slice(0,10);
+    console.log("samplesSliced", samplesSliced);
+    
+    samplesSliced.reverse();
+    console.log("samplesSliced.reversed", samplesSliced);
+    
+    let otuidSliced = otuidArray.slice(0,10);
+    console.log("otuidSliced", otuidSliced);
+    
+    otuidSliced.reverse();
+    console.log("otuidSliced.reversed", otuidSliced);
+    
+    let otulabelsSliced = otulabelArray.slice(0,10);
+    console.log("otulabelsSliced", otulabelsSliced);
+
+    otulabelsSliced.reverse();
+    console.log("otulabelsSliced.reversed", otulabelsSliced);
+
     let trace1 = {
-      x: chosenSample[0].otu_ids,
-      y: chosenSample[0].sample_values,
+      x: otuidArray,
+      y: samplevalArray,
+      text: otulabelArray,
       mode: 'markers',
       marker: {
-        size: chosenSample[0].sample_values
+        size: samplevalArray,
+        color: otuidArray,
       },
       type: 'scatter'
     };
@@ -69,22 +102,43 @@ function buildCharts(sample) {
 
     let layout = {
       title: {
-        text: 'Bacteria Cultures per Sample'
+        text: 'Bacteria Cultures Per Sample'
+      },
+      xaxis: {
+        title: {
+          text: 'OTU ID'
+        }
+      },
+      yaxis: {
+        title: {
+          text: 'Number of Bacteria'
+        }
       },
       showlegend: false,
-      height: 600,
-      width: 600
+      height: 500,
+      width: 1200
     };
     
     // Render the Bubble Chart
     Plotly.newPlot("bubble", data, layout);
 
     // For the Bar Chart, map the otu_ids to a list of strings for your yticks
-    let trace2 = {
-      x: chosenSample[0].sample_values,
-      y: chosenSample[0].otu_ids,
+    //text: slicedData.map(object => object.greekName),
+   
+    let labels = otuidSliced.map(item => `OTU ${item} `);
+
+    let trace2 = { 
+      x: samplesSliced,
+      y: labels,
+      text: otulabelsSliced,
       type: 'bar',
-      orientation: 'h'
+      orientation: 'h',
+      marker: {
+        line: {
+          height: 10,
+          width: 1
+        }
+      },
     };
 
     // Build a Bar Chart
@@ -95,9 +149,14 @@ function buildCharts(sample) {
       title: {
         text: 'Top 10 Bacteria Cultures Found'
       },
+      xaxis: {
+        title: {
+          text: 'Number of Bacteria'
+        }
+      },
       showlegend: false,
-      height: 600,
-      width: 600
+      height: 500,
+      width: 900
     };
 
     // Render the Bar Chart
@@ -112,7 +171,7 @@ function init() {
 
     // Get the names field
     let sampleNames = Object.values(data.names);
-    console.log(sampleNames);
+    console.log("sampleNames", sampleNames);
 
     // Use d3 to select the dropdown with id of `#selDataset`
     let dropdownMenu = d3.select("#selDataset");
@@ -127,14 +186,14 @@ function init() {
           .text(sample)
           .property("value", sample);
     });
-      
-    
+          
       // Get the first sample from the list
       let firstSample = dropdownMenu.property("value");
-      console.log(firstSample);
+      console.log("firstSample", firstSample);
+
     // Build charts and metadata panel with the first sample
-    let test = buildMetadata(firstSample);
-    let test2 = buildCharts(firstSample);
+    buildMetadata(firstSample);
+    buildCharts(firstSample);
 
     
 
@@ -143,10 +202,12 @@ function init() {
 }
 
 // Function for event listener
-function optionChanged(newSample) {
-  // Build charts and metadata panel each time a new sample is selected
-
-}
+// function optionChanged(newSample) {
+//   // Build charts and metadata panel each time a new sample is selected
+  
+//   let test = newSample.property("value");
+//   console.log("newSample", test);
+// }
 
 // Initialize the dashboard
 init();
