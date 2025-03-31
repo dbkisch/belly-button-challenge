@@ -20,7 +20,7 @@ function buildMetadata(sample) {
     newMetadata = d3.select("#sample-metadata");
     
     // Use `.html("") to clear any existing metadata
-
+    newMetadata.html("");
 
     // Inside a loop, you will need to use d3 to append new
     // tags for each key-value in the filtered metadata. 
@@ -28,12 +28,9 @@ function buildMetadata(sample) {
     for (let j = 0; j < chosenKeys.length; j++) {
       newMetadata
           .append("div")
-          .text(chosenKeys[j] + ": " + chosenValues[j])
+          .text(chosenKeys[j].toUpperCase() + ": " + chosenValues[j])
           console.log(chosenKeys[j] + ": " + chosenValues[j]);
     }
-
-
-
   });
 }
 
@@ -53,10 +50,6 @@ function buildCharts(sample) {
     console.log(chosenSample);
 
     // Get the otu_ids, otu_labels, and sample_values  
-    // let otuidArray = [];
-    // let samplevalArray = [];
-    // let otulabelArray = [];
-
     let otuidArray = chosenSample[0].otu_ids;
     console.log("otiuidArray", otuidArray);
 
@@ -159,8 +152,10 @@ function buildCharts(sample) {
       width: 900
     };
 
+    let config = {responsive: true};
+
     // Render the Bar Chart
-    Plotly.newPlot("bar", datab, layoutb);
+    Plotly.newPlot("bar", datab, layoutb, config);
 
   });
 }
@@ -202,12 +197,15 @@ function init() {
 }
 
 // Function for event listener
-// function optionChanged(newSample) {
-//   // Build charts and metadata panel each time a new sample is selected
-  
-//   let test = newSample.property("value");
-//   console.log("newSample", test);
-// }
+function optionChanged(newSample) {
+  // Build charts and metadata panel each time a new sample is selected
+  let dropdownMenu = d3.select("#selDataset");
+  let nextSample = dropdownMenu.property("value");
+  console.log("nextSample", nextSample);
+
+  buildMetadata(nextSample);
+  buildCharts(nextSample);
+}
 
 // Initialize the dashboard
 init();
