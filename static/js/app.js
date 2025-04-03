@@ -4,7 +4,7 @@ function buildMetadata(sample) {
 
     // get the metadata field
     let sampleMetadata = Object.values(data1.metadata);
-    console.log(sampleMetadata);
+   
     // Filter the metadata for the object with the desired sample number
       
     function selectName(item) {
@@ -12,7 +12,7 @@ function buildMetadata(sample) {
     }
     
     let chosen = sampleMetadata.filter(selectName);
-    console.log(chosen[0]);
+    console.log("metadata for chosen sample", chosen[0]);
     let chosenKeys = Object.keys(chosen[0]);
     let chosenValues = Object.values(chosen[0]);
 
@@ -40,14 +40,13 @@ function buildCharts(sample) {
 
     // Get the samples field
     let samples = Object.values(data2.samples);
-    console.log(samples);
 
     // Filter the samples for the object with the desired sample number
     function selectSample(item) {
       return item.id == sample;
     }
     let chosenSample = samples.filter(selectSample);
-    console.log(chosenSample);
+    console.log("sample data for chosen test subject", chosenSample);
 
     // Get the otu_ids, otu_labels, and sample_values  
     let otuidArray = chosenSample[0].otu_ids;
@@ -57,8 +56,7 @@ function buildCharts(sample) {
     console.log("samplevalArray", samplevalArray);
     
     let otulabelArray = chosenSample[0].otu_labels;
-    
-    
+        
     let samplesSliced = samplevalArray.slice(0,10);
     console.log("samplesSliced", samplesSliced);
     
@@ -166,7 +164,6 @@ function init() {
 
     // Get the names field
     let sampleNames = Object.values(data.names);
-    console.log("sampleNames", sampleNames);
 
     // Use d3 to select the dropdown with id of `#selDataset`
     let dropdownMenu = d3.select("#selDataset");
